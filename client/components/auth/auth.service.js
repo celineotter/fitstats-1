@@ -59,7 +59,6 @@ angular.module('fitStatsApp')
        */
       createUser: function(user, callback) {
         var cb = callback || angular.noop;
-
         return User.save(user,
           function(data) {
             $cookieStore.put('token', data.token);

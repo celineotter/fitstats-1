@@ -40,10 +40,12 @@ exports.create = function(req, res) {
 // Updates an existing thing in the DB.
 exports.update = function(req, res) {
   if(req.body._id) { delete req.body._id; }
+
   Thing.findById(req.params.id, function (err, thing) {
     if (err) { return handleError(err); }
     if(!thing) { return res.send(404); }
     var updated = _.merge(thing, req.body);
+
     updated.save(function (err) {
       if (err) { return handleError(err); }
       return res.json(200, thing);

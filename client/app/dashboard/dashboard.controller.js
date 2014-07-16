@@ -24,7 +24,7 @@ angular.module('fitStatsApp')
     // $scope.userId = Auth.getCurrentUser().name;
   //})
 
-  .controller('WeightController', function($scope, FormFunctions){
+  .controller('WeightController', function($scope, FormFunctions, Auth){
     $scope.test = '5';
     $scope.test2 = FormFunctions.test;
 
@@ -35,9 +35,12 @@ angular.module('fitStatsApp')
 
     // $scope.submit = FormFunctions.submit;             // ∆ error in factory
     $scope.today = {};                                   // added to bypass error: $scope.today.weight
-    $scope.submit = function (weight) {                  // added to resolve error: submit
+    $scope.submit = function (weight, field, decimals) {                 // added to resolve error: submit
       $scope.today.weight = weight;
       $scope.inputMode = false;
+
+      var userId = Auth.getCurrentUser()._id;
+      FormFunctions.submit(weight, field, decimals, userId);
     };
 
     //should be refactored into separate factory
