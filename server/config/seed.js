@@ -5,8 +5,100 @@
 
 'use strict';
 
+var fibrous = require('fibrous');
 var Thing = require('../api/thing/thing.model');
 var User = require('../api/user/user.model');
+var FitnessData = require('../api/fitnessData/fitnessData.model');
+
+fibrous.run(function() {
+  // cleanup
+  User.find({}).sync.remove();
+  FitnessData.find({}).sync.remove();
+
+  // create new data
+  var user = User.sync.create({
+    provider: 'local',
+    name: 'Test User',
+    email: 'test@test.com',
+    password: 'test'
+  });
+
+  FitnessData.sync.create({
+    userId: user._id,
+    date: '20140718',
+    weight: 12,
+    bf: 4.5,
+    hr: 12,
+    bps: 12,
+    bpd: 12,
+    calories: 12,
+    protein: 12,
+    carbs: 12,
+    fat: 12
+  }, {
+    userId: user._id,
+    date: '20140719',
+    weight: 180,
+    bf: 4.5,
+    hr: 100,
+    bps: 120,
+    bpd: 80,
+    calories: 2400,
+    protein: 180,
+    carbs: 335,
+    fat: 65
+  });
+  console.log(FitnessData.sync.find());
+});
+
+
+/*
+FitnessData.find({}).remove(function() {
+  User.find({}).remove(function() {
+    User.create({
+      provider: 'local',
+      name: 'Test User',
+      email: 'test@test.com',
+      password: 'test'
+    }, function(err, user) {
+      User.findOne(function(err, newUser) {
+        console.log('user_Id', newUser._id)
+        console.log('userId', newUser.id)
+        var userId = newUser.id
+        FitnessData.create({
+          userId: userId,
+          date: '20140718',
+          weight: 12,
+          bf: 4.5,
+          hr: 12,
+          bps: 12,
+          bpd: 12,
+          calories: 12,
+          protein: 12,
+          carbs: 12,
+          fat: 12
+        }, {
+          userId: userId,
+          date: '20140719',
+          weight: 180,
+          bf: 4.5,
+          hr: 100,
+          bps: 120,
+          bpd: 80,
+          calories: 2400,
+          protein: 180,
+          carbs: 335,
+          fat: 65
+        }, function(err, fitnessData) {
+          FitnessData.find({userId: userId}, function(err, data) {
+            console.log('Fitnessdata', data);
+          })
+        });
+      })
+    });
+  });
+
+});
 
 Thing.find({}).remove(function() {
   Thing.create({
@@ -29,21 +121,4 @@ Thing.find({}).remove(function() {
     info : 'Easily deploy your app to Heroku or Openshift with the heroku and openshift subgenerators'
   });
 });
-
-User.find({}).remove(function() {
-  User.create({
-    provider: 'local',
-    name: 'Test User',
-    email: 'test@test.com',
-    password: 'test'
-  }, {
-    provider: 'local',
-    role: 'admin',
-    name: 'Admin',
-    email: 'admin@admin.com',
-    password: 'admin'
-  }, function() {
-      console.log('finished populating users');
-    }
-  );
-});
+*/

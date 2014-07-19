@@ -2,14 +2,14 @@
 
 angular.module('fitStatsApp')
 
-  .controller('DashboardCtrl', function ($scope, $filter, FormFunctions, $stateParams, $state) {
+  .controller('DashboardCtrl', function ($scope, $filter, FormFunctions, $stateParams, $state, User) {
     /**
      * $scope.currentDay = Object with all current Day's data - in filtered format
      * $scope.formData = pre-built submittion data - in raw format:
      */
     $scope.currentDay = {};
     $scope.formData = {};
-
+    console.log(User.get());
     $scope.loadViewItem = function(data, field) {
       var decimals = (field === 'weight' || field === 'bf') ? 1 : 0;
       var filteredData = $filter('number')(data, decimals);
@@ -17,16 +17,17 @@ angular.module('fitStatsApp')
     };
 
     $scope.retrieveWholeDaysStats = function () {
-      var userId = FormFunctions.userId;
       FormFunctions.retrieveDayStats()
-        .get({ id: userId, date: $scope.urlDate})
+        .get({ date: $scope.urlDate })
         .$promise.then(function(successResponse) {
-          $scope.formData = successResponse.data || {};
+          console.log('****** data success response:', successResponse);
+
+          $scope.formData = successResponse;
           _.forEach($scope.formData, function (singleData, field) {
             $scope.loadViewItem(singleData, field);
           });
-        }, function() {
-          console.log('GET request fail for day: '+ $scope.urlDate);
+        }, function(fail) {
+          console.log('GET request fail for day: '+ $scope.urlDate + ' - ', + fail);
         });
     };
 

@@ -1,21 +1,35 @@
 'use strict';
 
-  var storedData = {
-    weight: 180,
-    bf: 4.5,
-    hr: 100,
-    bps: 120,
-    bpd: 80,
-    calories: 2400,
-    protein: 180,
-    carbs: 335,
-    fat: 65
-  };
+var FitnessData = require('./fitnessData.model');
+
+  // var storedData = {
+  //   weight: 180,
+  //   bf: 4.5,
+  //   hr: 100,
+  //   bps: 120,
+  //   bpd: 80,
+  //   calories: 2400,
+  //   protein: 180,
+  //   carbs: 335,
+  //   fat: 65
+  // };
 
 exports.requestOneDayFitnessStat = function (req, res) {
   var requestDate = req.params.date;
-  console.log('reqDate:', requestDate);
-  return res.json({ data: storedData, date:  requestDate});
+  debugger;
+  console.log('userId:', req.user._id);
+  console.log('date:', requestDate);
+
+  FitnessData.findOne({userId: req.user._id, date: requestDate}, function (err, userFitnessData) {
+    if (err) { return res.send(500, err); }
+    console.log('userFitnessData', userFitnessData)
+    res.json(userFitnessData);
+  });
+
+
+
+
+  // return res.json({ data: storedData, date:  requestDate});
 };
 
 
@@ -25,21 +39,19 @@ exports.requestFitnessStat = function(req, res) {
   var dataRequested = req.params['0'];
 
   var returnData = storedData[ dataRequested ];
-  /*
-  UserData.findById(req.params.id, function (err, userData) {
-
-    if(err) { return handleError(res, err); }
-
-    if(!userData) { return res.send(404); }
-    return res.json(userData.dataRequested);
+  FitnessData.find({userId: req.user._id}, function (err, userFitnessData) {
+    if(err) console.log(err);
+    res.json(userFitnessData.dataRequested);
   });
-  */
-  return res.json({ data: returnData, field:  dataRequested});
 };
 
 
 exports.updateFitnessStat = function(req, res) {
   var data = req.body;
+  console.log('userId:', req.user._id);
+  console.log('body:', req.body);
+
+
   /*
   if(req.body._id) { delete req.body._id; }
 
