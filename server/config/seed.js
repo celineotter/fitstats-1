@@ -25,7 +25,7 @@ fibrous.run(function() {
 
   FitnessData.sync.create({
     userId: user._id,
-    date: '20140718',
+    date: '20140720',
     weight: 12,
     bf: 4.5,
     hr: 12,

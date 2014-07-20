@@ -20,12 +20,13 @@ angular.module('fitStatsApp')
       FormFunctions.retrieveDayStats()
         .get({ date: $scope.urlDate })
         .$promise.then(function(successResponse) {
-          console.log('****** data success response:', successResponse);
 
+          console.log('****** data success response:', successResponse);
           $scope.formData = successResponse;
           _.forEach($scope.formData, function (singleData, field) {
             $scope.loadViewItem(singleData, field);
           });
+
         }, function(fail) {
           console.log('GET request fail for day: '+ $scope.urlDate + ' - ', + fail);
         });

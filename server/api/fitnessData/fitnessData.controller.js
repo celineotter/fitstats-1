@@ -1,6 +1,7 @@
 'use strict';
 
 var FitnessData = require('./fitnessData.model');
+var fibrous = require('fibrous');
 
   // var storedData = {
   //   weight: 180,
@@ -14,23 +15,31 @@ var FitnessData = require('./fitnessData.model');
   //   fat: 65
   // };
 
-exports.requestOneDayFitnessStat = function (req, res) {
-  var requestDate = req.params.date;
-  debugger;
-  console.log('userId:', req.user._id);
-  console.log('date:', requestDate);
+exports.requestOneDayFitnessStat = fibrous(function (req, res) {
+  // var requestDate = req.params.date;
+  // debugger;
+  // console.log('userId:', req.user._id);
+  // console.log('date:', requestDate);
+  //
+  // FitnessData.findOne({userId: req.user._id, date: requestDate}, function (err, userFitnessData) {
+  //   if (err) { return res.send(500, err); }
+  //   console.log('userFitnessData', userFitnessData)
+  //   res.json(userFitnessData);
+  // });
+  //
+  console.log('test');
+  var fitnessData = FitnessData.sync.findOne({userId: req.user._id, date: req.params.date});
+  console.log(fitnessData);
 
-  FitnessData.findOne({userId: req.user._id, date: requestDate}, function (err, userFitnessData) {
-    if (err) { return res.send(500, err); }
-    console.log('userFitnessData', userFitnessData)
-    res.json(userFitnessData);
-  });
+  res.json(fitnessData);
+  // var fib = FitnessData.sync.findOne({userId: req.user._id, date: req.params.date});
+  // res.json(fib);
 
 
 
 
   // return res.json({ data: storedData, date:  requestDate});
-};
+});
 
 
 
